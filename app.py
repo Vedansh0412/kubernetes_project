@@ -1,8 +1,13 @@
-import streamlit as st
 import sqlite3
+import streamlit as st
 
 # Connect to the local SQLite database (create if it doesn't exist)
-conn = sqlite3.connect('user_data.db')
+try:
+  conn = sqlite3.connect('user_data.db')
+except sqlite3.Error as e:
+  st.error(f"Error connecting to database: {e}")
+  exit(1)  # Exit the application on error
+
 c = conn.cursor()
 
 # Create table to store user data (if it doesn't exist)
