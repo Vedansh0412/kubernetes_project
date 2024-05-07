@@ -5,8 +5,8 @@ pipeline {
     stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                   credentialsId: 'your-git-credentials-id', // Replace with your credential ID
-                   url: 'https://github.com/your-username/your-repository.git' // Replace with your repository URL
+                   credentialsId: 'vedansh_jenkins', // Replace with your credential ID
+                   url: 'https://github.com/Vedansh0412/kubernetes_project.git' // Replace with your repository URL
             }
         }
 
