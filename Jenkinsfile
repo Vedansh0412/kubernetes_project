@@ -12,7 +12,7 @@ pipeline {
 
         stage('Build Application') {
             steps {
-                sh '/usr/local/bin/python3 python3 -m venv venv'  // Create virtual environment (optional)
+                sh 'python3 -m venv venv'  // Create virtual environment (optional)
                 sh 'source venv/bin/activate && pip install -r requirements.txt' // Install dependencies (if using requirements.txt)
                 sh 'python3 app.py'        // Run the Python script (your Streamlit app)
             }
