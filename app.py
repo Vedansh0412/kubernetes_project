@@ -1,68 +1,35 @@
 import sqlite3
-import streamlit as st
 
 # Connect to the local SQLite database (create if it doesn't exist)
 try:
   conn = sqlite3.connect('user_data.db')
 except sqlite3.Error as e:
-  st.error(f"Error connecting to database: {e}")
+  print(f"Error connecting to database: {e}")
   exit(1)  # Exit the application on error
 
 c = conn.cursor()
 
-# Create table to store user data (if it doesn't exist)
-c.execute('''CREATE TABLE IF NOT EXISTS user_data (name text, email text, phone text)''')
-
-
+# Function to create a user (assuming no UI for user input)
 def create_user(name, email, phone):
   """Inserts user data into the database"""
   c.execute("INSERT INTO user_data (name, email, phone) VALUES (?, ?, ?)", (name, email, phone))
   conn.commit()
 
+# Get user data from the kernel (command line arguments)
+import sys
+if len(sys.argv) != 4:
+  print("Usage: python app.py <name> <email> <phone>")
+  exit(1)
 
-st.title("User Registration Form")
+name = sys.argv[1]
+email = sys.argv[2]
+phone = sys.argv[3]
 
-# Form elements with placeholders
-name = st.text_input("Name:", placeholder="Enter your name")
-email = st.text_input("Email:", placeholder="Enter your email")
-phone = st.text_input("Phone Number:", placeholder="Enter your phone number")
+# Create the user
+create_user(name, email, phone)
 
-# Submit button
-submitted = st.button("Submit")
-
-# Form submission logic
-if submitted:
-  create_user(name, email, phone)
-  # Check if data was inserted successfully
-  c.execute("SELECT * FROM user_data WHERE name = ?", (name,))
-  inserted_user = c.fetchone()
-  if inserted_user:
-      st.success("Data submitted successfully!")
-      # Optionally, display the inserted data
-      st.write("Name:", inserted_user[0])
-      st.write("Email:", inserted_user[1])
-      st.write("Phone:", inserted_user[2])
-  else:
-      st.error("Error: Data insertion failed!")
-
-
-print(f"Name: {name}, Email: {email}, Phone: {phone}")
-
-# Search functionality (optional)
-st.header("Search Users")
-search_name = st.text_input("Search by Name:")
-search_submitted = st.button("Search")
-
-if search_submitted:
-  c.execute("SELECT * FROM user_data WHERE name = ?", (search_name,))
-  search_result = c.fetchone()
-  if search_result:
-      st.success("Found user data!")
-      st.write("Name:", search_result[0])
-      st.write("Email:", search_result[1])
-      st.write("Phone:", search_result[2])
-  else:
-      st.warning("No user found with that name.")
+print(f"User data inserted successfully!")
 
 # Close the connection to the database
 conn.close()
+
