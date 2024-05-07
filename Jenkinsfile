@@ -10,18 +10,23 @@ pipeline {
             }
         }
 
-        stage('Build Application') {
+        stage('Run Script') {
             steps {
-                sh 'source venv/bin/activate && pip install -r requirements.txt' // Install dependencies (if using requirements.txt)
-                sh 'python3 app.py'        // Run the Python script (your Streamlit app)
+                sh 'python app.py JohnDoe johndoe@example.com 123-456-7890' // Replace with actual command
             }
         }
 
-    
-        stage('Deploy Application') {
+        stage('Post Actions') {
             steps {
-                // Replace with your deployment commands (e.g., copy to server)
-                sh 'scp app.py user@server:destination/path/'  // Example: SCP to server
+                script {
+                    // Check the database file for successful insertion (optional)
+                    file userDatabase = fileExists('user_data.db')
+                    if (userDatabase) {
+                        echo 'Database file found - likely insertion successful!'
+                    } else {
+                        echo 'Database file not found - potential insertion failure!'
+                    }
+                }
             }
         }
   }
