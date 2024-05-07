@@ -12,7 +12,7 @@ pipeline {
 
         stage('Run Script') {
             steps {
-                sh 'python app.py JohnDoe johndoe@example.com 123-456-7890' // Replace with actual command
+                sh 'python3 app.py JohnDoe johndoe@example.com 123-456-7890' // Replace with actual command
             }
         }
 
